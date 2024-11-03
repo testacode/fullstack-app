@@ -9,7 +9,7 @@ const host = isProd
   : "http://localhost";
 
 const api = axios.create({
-  baseURL: `http://${host}:3000`,
+  baseURL: `${host}:3000`,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
