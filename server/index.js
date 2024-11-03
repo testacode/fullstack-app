@@ -8,6 +8,8 @@ import { logger } from "./utils/logger.js";
 
 const app = express();
 const port = 3000;
+const isProd = process.env.NODE_ENV === "production";
+const host = isProd ? "https://testacode.github.io" : "http://localhost";
 
 // Rate limiting
 const limiter = rateLimit({
@@ -26,7 +28,7 @@ app.use(helmet());
 app.use(limiter);
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: `${host}:5173`,
     methods: ["GET"],
     allowedHeaders: ["Content-Type"],
   })
