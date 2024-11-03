@@ -1,6 +1,6 @@
+import { logger } from "../utils/logger";
 import { useState, useCallback } from "react";
 import axios from "axios";
-import { logger } from "../utils/logger";
 
 const isProd =
   process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";

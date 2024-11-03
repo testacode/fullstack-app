@@ -1,10 +1,24 @@
-import express from "express";
+import { errorHandler } from "./middleware/errorHandler.js";
+import { logger } from "./utils/logger.js";
+import { requestLogger } from "./middleware/requestLogger.js";
 import cors from "cors";
+import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import { errorHandler } from "./middleware/errorHandler.js";
-import { requestLogger } from "./middleware/requestLogger.js";
-import { logger } from "./utils/logger.js";
+
+import { createRequire } from "module"; // Hack to use require in ESM
+const require = createRequire(import.meta.url); // Hack to use require in ESM
+
+const { auth, requiresAuth } = require("express-openid-connect");
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: "d91dd8ffbf5133fb833fa61ad87bba497e0cf2ec57fcf2177b0d74ce6a28206f",
+  baseURL: "http://localhost:3000",
+  clientID: "RJUf14dEqf4AbgNni38Zij0tbhN91st3",
+  issuerBaseURL: "https://dev-zns1jkd5epmkz1gq.us.auth0.com",
+};
 
 const app = express();
 const port = 3000;
@@ -44,6 +58,18 @@ app.use(
 
 // Logging middleware
 app.use(requestLogger);
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get("/", (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
+});
+
+app.get("/profile", requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
 
 // Routes
 app.get("/api/hello", (req, res, next) => {
