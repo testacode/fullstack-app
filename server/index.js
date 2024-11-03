@@ -8,7 +8,8 @@ import { logger } from "./utils/logger.js";
 
 const app = express();
 const port = 3000;
-const isProd = process.env.NODE_ENV === "production";
+const isProd =
+  process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";
 const host = isProd ? "https://testacode.github.io" : "http://localhost";
 
 // Rate limiting
