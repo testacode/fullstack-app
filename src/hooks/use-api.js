@@ -4,7 +4,9 @@ import { logger } from "../utils/logger";
 
 const isProd =
   process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";
-const host = isProd ? "https://testacode.github.io" : "http://localhost";
+const host = isProd
+  ? "https://testacode.github.io/fullstack-app"
+  : "http://localhost";
 
 const api = axios.create({
   baseURL: `http://${host}:3000`,
