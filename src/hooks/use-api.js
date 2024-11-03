@@ -2,8 +2,12 @@ import { useState, useCallback } from "react";
 import axios from "axios";
 import { logger } from "../utils/logger";
 
+const isProd =
+  process.env.NODE_ENV === "production" || process.env.NODE_ENV === "prod";
+const host = isProd ? "https://testacode.github.io" : "http://localhost";
+
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: `http://${host}:3000`,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
